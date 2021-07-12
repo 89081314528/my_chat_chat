@@ -58,13 +58,13 @@ public class Controller implements Initializable {
             new Thread(() -> {
                 try {
                     while (true) { // Ждем сообщения об успешной авторизации ("/authok")
-                        final String msgAuth = in.readUTF();
+                        final String msgAuth = in.readUTF(); // что это будет за сообщение?
                         System.out.println("CLIENT: Received message: " + msgAuth);
                         if (msgAuth.startsWith("/authok")) {
                             setAuth(true);
                             nick = msgAuth.split("\\s")[1];
                             textArea.appendText("Успешная авторизация под ником " + nick + "\n");
-                            break;
+                            break; // откуда выйдет?
                         }
                         textArea.appendText(msgAuth + "\n");
                     }

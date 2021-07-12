@@ -15,6 +15,7 @@ public class ClientHandler {
 
     public ClientHandler(Socket socket, ChatServer server) {
         try {
+            socket.setSoTimeout(12000); // 12 секунд, далее в 48 строке обнуляем время
             this.name = "";
             this.socket = socket;
             this.server = server;
@@ -44,6 +45,7 @@ public class ClientHandler {
                     final String nickname = server.getAuthService().getNicknameByLoginAndPassword(login, pass);
                     if (nickname != null) {
                         if (!server.isNicknameBusy(nickname)) {
+                            socket.setSoTimeout(0);
                             sendMessage("/authok " + nickname);
                             this.name = nickname;
                             server.broadcast("SERVER: Пользователь " + nickname + " зашел в чат");

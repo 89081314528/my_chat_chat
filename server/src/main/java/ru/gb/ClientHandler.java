@@ -15,7 +15,7 @@ public class ClientHandler {
 
     public ClientHandler(Socket socket, ChatServer server) {
         try {
-            socket.setSoTimeout(12000); // 12 секунд, далее в 48 строке обнуляем время
+            socket.setSoTimeout(1200000); // 12 секунд, далее в 48 строке обнуляем время
             this.name = "";
             this.socket = socket;
             this.server = server;

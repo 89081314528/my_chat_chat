@@ -1,11 +1,10 @@
 package ru.gb;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleAuthService implements AuthService {
 
-    private static class UserData {
+    static class UserData {
         private final String login;
         private final String password;
         private final String nickname;
@@ -18,13 +17,18 @@ public class SimpleAuthService implements AuthService {
 
     }
 
+    public List<UserData> getUsers() {
+        return users;
+    }
+
     private List<UserData> users;
 
-    public SimpleAuthService() {
-        users = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            users.add(new UserData("login" + i, "pass" + i, "nick" + i));
-        }
+    public SimpleAuthService()  {
+               users = JdbcApp.getDataFromTable();
+//                new ArrayList<>(); // ранее данные логин/пароль/ник заполнялись так
+//        for (int i = 0; i < 5; i++) {
+//            users.add(new UserData("login" + i, "pass" + i, "nick" + i));
+//        }
     }
 
     @Override

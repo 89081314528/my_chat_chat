@@ -1,0 +1,7 @@
+[You] nickname2: juhjujuuju
+SERVER: Пользователь nickname3 зашел в чат
+nickname3: ooppopp
+SERVER: Пользователь nickname4 зашел в чат
+nickname4: 444444444444444
+[You] nickname2: 222222222222222
+nickname5: 555555555555

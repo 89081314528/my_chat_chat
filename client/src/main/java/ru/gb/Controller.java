@@ -1,8 +1,6 @@
 package ru.gb;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
@@ -28,6 +26,7 @@ public class Controller implements Initializable {
     private DataInputStream in;
     private DataOutputStream out;
     private String nick;
+    private String login;
 
     @FXML
     private HBox clientPanel;
@@ -57,6 +56,7 @@ public class Controller implements Initializable {
 
             new Thread(() -> {
                 try {
+
                     while (true) { // Ждем сообщения об успешной авторизации ("/authok")
                         final String msgAuth = in.readUTF(); // что это будет за сообщение?
                         System.out.println("CLIENT: Received message: " + msgAuth);
@@ -68,6 +68,10 @@ public class Controller implements Initializable {
                         }
                         textArea.appendText(msgAuth + "\n");
                     }
+                    BufferedWriter writer = new BufferedWriter(new FileWriter("history_" + login + ".txt", true));   //здесь создаем файл?
+                    // вычитать в лист все строки и взять последние 100
+
+
                     while (true) { // После успешной авторизации можно обрабатывать все сообщения
                         String msgFromServer = in.readUTF();
                         System.out.println("CLIENT: Received message: " + msgFromServer);
@@ -85,6 +89,11 @@ public class Controller implements Initializable {
                             continue;
                         }
                         textArea.appendText(msgFromServer + "\n");
+                        if (!msgFromServer.startsWith("SERVER")) {
+                            writer.write(msgFromServer + "\n"); //пишем в файл историю
+                            writer.flush();
+                        }
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -126,6 +135,7 @@ public class Controller implements Initializable {
         try {
             System.out.println("CLIENT: Send auth message");
             out.writeUTF("/auth " + loginField.getText() + " " + passwordField.getText());
+            login = loginField.getText();
             loginField.clear();
             passwordField.clear();
         } catch (IOException e) {

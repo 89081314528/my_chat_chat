@@ -64,13 +64,23 @@ public class Controller implements Initializable {
                             setAuth(true);
                             nick = msgAuth.split("\\s")[1];
                             textArea.appendText("Успешная авторизация под ником " + nick + "\n");
-                            break; // откуда выйдет?
+                            break;
                         }
                         textArea.appendText(msgAuth + "\n");
                     }
-                    BufferedWriter writer = new BufferedWriter(new FileWriter("history_" + login + ".txt", true));   //здесь создаем файл?
-                    // вычитать в лист все строки и взять последние 100
-
+                    String filename = "history_" + login + ".txt";
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true)); //здесь создаем файл
+                    BufferedReader reader = new BufferedReader(new FileReader(filename));
+                    List<String> history = new ArrayList<>();
+                    String str;
+                    while ((str = reader.readLine()) != null) {
+                        history.add(str + "\n");
+                    }
+                    textArea.appendText("История сообщений (показаны последние 5 сообщений) " + "\n");
+                    for (int i = history.size() - 5; i < history.size(); i++) {
+                        String line = history.get(i);
+                        textArea.appendText(line);
+                    }
 
                     while (true) { // После успешной авторизации можно обрабатывать все сообщения
                         String msgFromServer = in.readUTF();
@@ -90,7 +100,7 @@ public class Controller implements Initializable {
                         }
                         textArea.appendText(msgFromServer + "\n");
                         if (!msgFromServer.startsWith("SERVER")) {
-                            writer.write(msgFromServer + "\n"); //пишем в файл историю
+                            writer.write(msgFromServer + "\n"); //пишем в файл историю, сообщения от сервера не пишем
                             writer.flush();
                         }
 

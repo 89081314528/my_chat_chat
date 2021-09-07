@@ -24,7 +24,8 @@ public class SimpleAuthService implements AuthService {
     private List<UserData> users;
 
     public SimpleAuthService()  {
-               users = JdbcApp.getDataFromTable();
+        JdbcApp jdbcApp = new JdbcApp();// ???????????????
+               users = jdbcApp.getDataFromTable();
 //                new ArrayList<>(); // ранее данные логин/пароль/ник заполнялись так
 //        for (int i = 0; i < 5; i++) {
 //            users.add(new UserData("login" + i, "pass" + i, "nick" + i));

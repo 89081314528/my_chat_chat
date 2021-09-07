@@ -9,22 +9,25 @@ import java.util.List;
 
 
 public class JdbcApp {
-    private static Connection connection;
-    private static Statement stmt;
+    private Connection connection;
+    private Statement stmt;
 
     public static void main(String[] args) {
+        JdbcApp jdbcApp = new JdbcApp(); // сделать все методы нестатическими
         try {
-            connect();
-            createTableEx();
-            readEx();
+            jdbcApp.connect();
+            jdbcApp.createTableEx();
+//            deleteEx("login5");
+            jdbcApp.updateEx("password6","login5");
+            jdbcApp.readEx();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            disconnect();
+            jdbcApp.disconnect();
         }
     }
 
-    static void createTableEx() throws SQLException {
+    void createTableEx() throws SQLException {
         stmt.executeUpdate("CREATE TABLE IF NOT EXISTS my_chat_chat (\n" +
                 "        id    INTEGER PRIMARY KEY,\n" +
                 "        login  TEXT,\n" +
@@ -33,11 +36,11 @@ public class JdbcApp {
                 "    );");
     }
 
-    private static void dropTableEx() throws SQLException {
+    private void dropTableEx() throws SQLException {
         stmt.executeUpdate("DROP TABLE IF EXISTS my_chat_chat;");
     }
 
-    static List<SimpleAuthService.UserData> getDataFromTable() {
+    List<SimpleAuthService.UserData> getDataFromTable() {
         List<SimpleAuthService.UserData> users = new ArrayList<>();
         try (ResultSet rs = stmt.executeQuery("SELECT * FROM my_chat_chat;")) {
             while (rs.next()) {
@@ -45,12 +48,12 @@ public class JdbcApp {
                         rs.getString(3), rs.getString(4)));
             }
         } catch (SQLException throwables) {
-           throw new RuntimeException(throwables);
+            throw new RuntimeException(throwables);
         }
         return users;
     }
 
-    private static void readEx() throws SQLException {
+    private void readEx() throws SQLException {
         try (ResultSet rs = stmt.executeQuery("SELECT * FROM my_chat_chat;")) {
             while (rs.next()) {
                 System.out.println(rs.getInt(1) + " " + rs.getString(2) + " " +
@@ -59,29 +62,39 @@ public class JdbcApp {
         }
     }
 
-    private static void clearTableEx() throws SQLException {
+    private void clearTableEx() throws SQLException {
         stmt.executeUpdate("DELETE FROM my_chat_chat;");
     }
 
-    private static void deleteEx() throws SQLException {
-        stmt.executeUpdate("DELETE FROM my_chat_chat WHERE login = 1;");
+    private void deleteEx(String login) throws SQLException {
+        try (PreparedStatement ps =
+                     connection.prepareStatement("DELETE FROM my_chat_chat WHERE login = ?")) {
+            ps.setString(2, login);
+            ps.executeUpdate();
+        }
     }
 
-    private static void updateEx() throws SQLException {
-        stmt.executeUpdate("UPDATE my_chat_chat SET password = 1 WHERE login = 1;");
+    private void updateEx(String pass, String log) throws SQLException {
+        try (PreparedStatement ps =
+                     connection.prepareStatement("UPDATE my_chat_chat SET password = ? WHERE login = ?")) {
+            ps.setString(1, pass);
+            ps.setString(2, log);
+            ps.executeUpdate();
+        }
+//        stmt.executeUpdate(String.format("UPDATE my_chat_chat SET password = '%s' WHERE login = '%s';", pass, log));
     }
 
-    private static void insertEx(String name, Integer score) throws SQLException {
-        stmt.executeUpdate(String.format("INSERT INTO my_chat_chat (login, password) VALUES ('%s', '%s')", name, score));
+    private void insertEx(String login, String password) throws SQLException {
+        stmt.executeUpdate(String.format("INSERT INTO my_chat_chat (login, password) VALUES ('%s', '%s')", login, password));
     }
 
 
-    public static void connect() throws SQLException {
+    public void connect() throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite:my_chat_chat.db");
         stmt = connection.createStatement();
     }
 
-    public static void disconnect() {
+    public void disconnect() {
         try {
             if (stmt != null) {
                 stmt.close();

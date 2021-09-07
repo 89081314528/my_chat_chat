@@ -5,3 +5,6 @@ SERVER: Пользователь nickname4 зашел в чат
 nickname4: 444444444444444
 [You] nickname2: 222222222222222
 nickname5: 555555555555
+[You] nickname2: hello
+nickname1: good evening
+[You] nickname2: evening

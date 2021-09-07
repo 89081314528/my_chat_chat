@@ -8,3 +8,8 @@ nickname4: 444444444444444
 [You] nickname1: 1111111111111111
 nickname2: 222222222222222
 nickname5: 555555555555
+[You] nickname1: hi
+nickname2: hello
+[You] nickname1: good evening
+[You] nickname1: hi hi hi
+nickname2: evening

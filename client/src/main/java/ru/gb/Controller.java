@@ -69,7 +69,6 @@ public class Controller implements Initializable {
                         textArea.appendText(msgAuth + "\n");
                     }
                     String filename = "history_" + login + ".txt";
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true)); //здесь создаем файл
                     BufferedReader reader = new BufferedReader(new FileReader(filename));
                     List<String> history = new ArrayList<>();
                     String str;
@@ -81,6 +80,8 @@ public class Controller implements Initializable {
                         String line = history.get(i);
                         textArea.appendText(line);
                     }
+                    reader.close();
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true)); //здесь создаем файл
 
                     while (true) { // После успешной авторизации можно обрабатывать все сообщения
                         String msgFromServer = in.readUTF();

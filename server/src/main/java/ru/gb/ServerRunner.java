@@ -7,7 +7,7 @@ public class ServerRunner {
         try {
             jdbcApp.connect();
             jdbcApp.createTableEx();
-            new ChatServer();
+            new ChatServer(jdbcApp);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

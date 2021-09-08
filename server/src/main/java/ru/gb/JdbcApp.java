@@ -13,13 +13,12 @@ public class JdbcApp {
     private Statement stmt;
 
     public static void main(String[] args) {
-        ServerRunner serverRunner = new ServerRunner();
-        JdbcApp jdbcApp = new JdbcApp(); // сделать все методы нестатическими
+        JdbcApp jdbcApp = new JdbcApp();
         try {
             jdbcApp.connect();
             jdbcApp.createTableEx();
 //            jdbcApp.deleteEx("login5");
-            jdbcApp.updateEx("password6","login5");
+            jdbcApp.updateEx("password5","login5");
             jdbcApp.readEx();
         } catch (Exception e) {
             e.printStackTrace();

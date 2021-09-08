@@ -12,9 +12,9 @@ public class ChatServer {
 
     private final List<ClientHandler> clients;
 
-    public ChatServer() {
+    public ChatServer(JdbcApp jdbcApp) {
         clients = new ArrayList<>();
-        authService = new SimpleAuthService();
+        authService = new SimpleAuthService(jdbcApp);
 
         try (ServerSocket serverSocket = new ServerSocket(8189)) {
             System.out.println("SERVER: Server start...");

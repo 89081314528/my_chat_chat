@@ -13,11 +13,12 @@ public class JdbcApp {
     private Statement stmt;
 
     public static void main(String[] args) {
+        ServerRunner serverRunner = new ServerRunner();
         JdbcApp jdbcApp = new JdbcApp(); // сделать все методы нестатическими
         try {
             jdbcApp.connect();
             jdbcApp.createTableEx();
-//            deleteEx("login5");
+//            jdbcApp.deleteEx("login5");
             jdbcApp.updateEx("password6","login5");
             jdbcApp.readEx();
         } catch (Exception e) {
@@ -69,7 +70,7 @@ public class JdbcApp {
     private void deleteEx(String login) throws SQLException {
         try (PreparedStatement ps =
                      connection.prepareStatement("DELETE FROM my_chat_chat WHERE login = ?")) {
-            ps.setString(2, login);
+            ps.setString(1, login);
             ps.executeUpdate();
         }
     }
@@ -81,11 +82,15 @@ public class JdbcApp {
             ps.setString(2, log);
             ps.executeUpdate();
         }
-//        stmt.executeUpdate(String.format("UPDATE my_chat_chat SET password = '%s' WHERE login = '%s';", pass, log));
     }
 
     private void insertEx(String login, String password) throws SQLException {
-        stmt.executeUpdate(String.format("INSERT INTO my_chat_chat (login, password) VALUES ('%s', '%s')", login, password));
+        try (PreparedStatement ps =
+                     connection.prepareStatement("INSERT INTO my_chat_chat (login, password) VALUES (?, ?)")) {
+            ps.setString(1, login);
+            ps.setString(2, password);
+            ps.executeUpdate();
+        }
     }
 
 

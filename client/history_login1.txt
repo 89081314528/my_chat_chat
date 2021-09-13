@@ -13,3 +13,4 @@ nickname2: hello
 [You] nickname1: good evening
 [You] nickname1: hi hi hi
 nickname2: evening
+nickname2: hello

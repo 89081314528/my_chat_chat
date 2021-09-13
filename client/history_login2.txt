@@ -8,3 +8,4 @@ nickname5: 555555555555
 [You] nickname2: hello
 nickname1: good evening
 [You] nickname2: evening
+[You] nickname2: hello

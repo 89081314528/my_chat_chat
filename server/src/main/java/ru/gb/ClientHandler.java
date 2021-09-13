@@ -14,7 +14,7 @@ public class ClientHandler {
     private final DataOutputStream out;
     private String name;
 
-    public ClientHandler(Socket socket, ChatServer server) {
+    public ClientHandler(Socket socket, ChatServer server, ExecutorService service) {
         try {
             socket.setSoTimeout(1200000); // 1200 секунд, далее в 48 строке обнуляем время
             this.name = "";
@@ -22,7 +22,6 @@ public class ClientHandler {
             this.server = server;
             this.in = new DataInputStream(socket.getInputStream());
             this.out = new DataOutputStream(socket.getOutputStream());
-            ExecutorService service = Executors.newSingleThreadExecutor();
             service.execute(() -> {
                 try {
                     authenticate();
@@ -31,7 +30,6 @@ public class ClientHandler {
                     closeConnection();
                 }
             });
-            service.shutdown();
         } catch (IOException e) {
             throw new RuntimeException("Не могу создать обработчик для клиента", e);
         }

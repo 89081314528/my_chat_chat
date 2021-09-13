@@ -5,14 +5,18 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ChatServer {
 
     private final AuthService authService;
 
     private final List<ClientHandler> clients;
+    ExecutorService service = Executors.newFixedThreadPool(20);
 
     public ChatServer(JdbcApp jdbcApp) {
+
         clients = new ArrayList<>();
         authService = new SimpleAuthService(jdbcApp);
 
@@ -21,11 +25,12 @@ public class ChatServer {
             while (true) {
                 Socket socket = serverSocket.accept();
                 System.out.println("SERVER: Client connected...");
-                new ClientHandler(socket, this);
+                new ClientHandler(socket, this, service);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        service.shutdown();
     }
 
     public void broadcastClientList() {
